@@ -143,7 +143,7 @@ export const authApi = {
 export const resumeApi = {
   async getAll(userId: string): Promise<Resume[]> {
     return apiClient.get<Resume[]>(
-      `/resumes?userId=${encodeURIComponent(userId)}&_sort=createdAt&_order=desc`
+      `/resumes?userId=${encodeURIComponent(userId)}`
     );
   },
 
@@ -189,7 +189,7 @@ export const resumeApi = {
 export const analysisApi = {
   async getAll(userId: string): Promise<Analysis[]> {
     return apiClient.get<Analysis[]>(
-      `/analyses?userId=${encodeURIComponent(userId)}&_sort=createdAt&_order=desc`
+      `/analyses?userId=${encodeURIComponent(userId)}`
     );
   },
 
