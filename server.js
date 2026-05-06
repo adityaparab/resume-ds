@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { createServer } from 'node:http';
-import { readFileSync, statSync, existsSync } from 'node:fs';
+import { readFileSync, statSync, existsSync, watch } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
@@ -83,6 +83,28 @@ const server = createServer((req, res) => {
 
   // --- Static files + SPA fallback ---
   serveStatic(url.pathname, res);
+});
+
+// ---------------------------------------------------------------------------
+// Watch db.json for changes (auto-reload) — in development
+// ---------------------------------------------------------------------------
+let writing = false;
+let hadReadError = false;
+
+adapter.onWriteStart = () => { writing = true; };
+adapter.onWriteEnd = () => { writing = false; };
+
+watch(DB_FILE).on('change', () => {
+  if (!writing) {
+    db.read().catch((e) => {
+      if (e instanceof SyntaxError) {
+        hadReadError = true;
+        console.error(`❌ Invalid JSON in ${DB_FILE}:`, e.message);
+      } else {
+        throw e;
+      }
+    });
+  }
 });
 
 server.listen(PORT, () => {
