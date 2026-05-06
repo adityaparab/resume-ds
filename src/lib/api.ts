@@ -3,7 +3,7 @@ import type { User, Resume, Analysis, ResumeFormData, JsonResume } from '@/types
 import { jsonResumeSchema } from './validation';
 import { generateId } from './utils';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // ============================================================
 // Generic fetch wrapper with error handling
